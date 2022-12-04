@@ -1,10 +1,11 @@
 interface SearchFromItunesPayload {
-  term: String;
+  term: string;
+  entity: string;
 }
 
 interface SearchFromItunesResponse {
-  resultCount: Number;
-  results: Artist[];
+  resultCount: number;
+  results: Array<Artist>;
 }
 
 interface Artist {

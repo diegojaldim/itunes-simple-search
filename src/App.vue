@@ -2,7 +2,7 @@
 
   <div class="flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-400">
 
-    <div class="flex flex-col h-2/3 w-1/3 border pt-5 pb-5 rounded-sm bg-slate-100 overflow-hidden">
+    <div class="flex flex-col h-2/3 w-2/3 border pt-5 pb-5 rounded-sm bg-slate-100 overflow-hidden">
       <div class="flex flex-col pl-5 pr-5 h-full">
 
         <div class="flex flex-col">
@@ -10,12 +10,12 @@
         </div>
 
 
-        <div class="flex flex-col grow">
+        <div class="flex flex-col grow" style="overflow: auto;">
           <ul class="border">
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li v-for="album in state.albuns">
+              <p>{{ album.collectionName }}</p>
+              <img :src="album.artworkUrl100" :alt="album.collectionName">
+            </li>
           </ul>
         </div>
 
@@ -28,7 +28,6 @@
 
 </template>
 
-
 <script lang="ts">
 import { reactive } from 'vue';
 import { searchFromItunes } from './services/itunes.service';
@@ -39,12 +38,24 @@ import type {
 
 export default {
   setup() {
-    const state = reactive({term: ''});
+    interface State {
+      term: string;
+      albuns: Array<Artist>;
+    };
+
+    const state: State = reactive({
+      term: '',
+      albuns: [],
+    });
   
     const onSearchFromItunes = async () => {
       const { term } = state;
-      
-      const response: SearchFromItunesResponse = await searchFromItunes({ term });
+
+      const response: SearchFromItunesResponse = await searchFromItunes({
+        term,
+        entity: 'album'
+      });
+      state.albuns = response.results;
     }
 
     return {
