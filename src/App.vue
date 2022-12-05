@@ -43,7 +43,7 @@
 
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { reactive } from 'vue';
 import { searchFromItunes } from './services/itunes.service';
 import type {
@@ -52,37 +52,28 @@ import type {
 } from './types/itunes.types';
 import Album from './components/Album.vue';
 
-export default {
-  setup() {
-    interface State {
-      term: string;
-      loading: boolean;
-      albuns: Array<Artist>;
-    };
+interface State {
+  term: string;
+  loading: boolean;
+  albuns: Array<Artist>;
+};
 
-    const state: State = reactive({
-        term: "",
-        albuns: [],
-        loading: false,
-    });
+const state: State = reactive({
+  term: '',
+  albuns: [],
+  loading: false,
+});
 
-    const onSearchFromItunes = async () => {
-      const { term } = state;
-      state.loading = true;
-      state.albuns = [];
-      const response: SearchFromItunesResponse = await searchFromItunes({
-          term,
-          entity: "album"
-      });
-      state.albuns = response.results;
-      state.loading = false;
-    };
+const onSearchFromItunes = async () => {
+  const { term } = state;
+  state.loading = true;
+  state.albuns = [];
+  const response: SearchFromItunesResponse = await searchFromItunes({
+    term,
+    entity: "album"
+  });
+  state.albuns = response.results;
+  state.loading = false;
+};
 
-    return {
-      state,
-      onSearchFromItunes
-    };
-  },
-  components: { Album }
-}
 </script>
